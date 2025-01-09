@@ -25,8 +25,9 @@ public:
         int next=1;
        while(next<ans.size()){
             int diff=abs(ans[next]-ans[prev]);
+
             if(diff>min_e){
-                prev++;
+                prev++; //as ans arr in ascending order, move prev to next to reduce diff
             }
             else{
                 next++;
