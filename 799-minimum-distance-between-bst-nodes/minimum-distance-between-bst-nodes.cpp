@@ -21,19 +21,10 @@ public:
         vector<int>ans;
         Inorder(root,ans);
         int min_e=INT_MAX;
-        int prev=0;
-        int next=1;
-       while(next<ans.size()){
-            int diff=abs(ans[next]-ans[prev]);
-
-            if(diff>min_e){
-                prev++; //as ans arr in ascending order, move prev to next to reduce diff
-            }
-            else{
-                next++;
-                min_e=diff;
-            }
-            if(prev==next) next++; //when prev ==next  menas both pointing to same ele than diff become 0 so this is wrong as than 0 will be min which is not correct so move next ++ if prev==next
+        
+        for(int i=1;i<ans.size();i++){
+            int diff=abs(ans[i]-ans[i-1]);
+            min_e=min(min_e,diff);
         }
         return min_e;
     }
