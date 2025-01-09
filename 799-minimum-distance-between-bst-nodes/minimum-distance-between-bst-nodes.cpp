@@ -33,7 +33,7 @@ public:
                 next++;
                 min_e=diff;
             }
-            if(prev==next) next++;
+            if(prev==next) next++; //when prev ==next  menas both pointing to same ele than diff become 0 so this is wrong as than 0 will be min which is not correct so move next ++ if prev==next
         }
         return min_e;
     }
