@@ -1,118 +1,7 @@
-//{ Driver Code Starts
-//
-
-#include <bits/stdc++.h>
-using namespace std;
-
-struct Node
-{
-    int data;
-    Node *left, *right;
-    Node(int val)
-    {
-        data = val;
-        left = right = NULL;
-    }
-};
-
-Node* buildTree(string str)
-{
-    // Corner Case
-    if (str.length() == 0 || str[0] == 'N')
-        return NULL;
-
-    // Creating vector of strings from input
-    // string after spliting by space
-    vector<string> ip;
-
-    istringstream iss(str);
-    for (string str; iss >> str; )
-        ip.push_back(str);
-
-    // Create the root of the tree
-    Node* root = new Node(stoi(ip[0]));
-
-    // Push the root to the queue
-    queue<Node*> queue;
-    queue.push(root);
-
-    // Starting from the second element
-    int i = 1;
-    while (!queue.empty() && i < ip.size()) {
-
-        // Get and remove the front of the queue
-        Node* currNode = queue.front();
-        queue.pop();
-
-        // Get the current node's value from the string
-        string currVal = ip[i];
-
-        // If the left child is not null
-        if (currVal != "N") {
-
-            // Create the left child for the current node
-            currNode->left = new Node(stoi(currVal));
-
-            // Push it to the queue
-            queue.push(currNode->left);
-        }
-
-        // For the right child
-        i++;
-        if (i >= ip.size())
-            break;
-        currVal = ip[i];
-
-        // If the right child is not null
-        if (currVal != "N") {
-
-            // Create the right child for the current node
-            currNode->right = new Node(stoi(currVal));
-
-            // Push it to the queue
-            queue.push(currNode->right);
-        }
-        i++;
-    }
-
-    return root;
-}
-
-bool isBST(Node* n, int lower, int upper)
-{
-    if (!n) return true;
-    if ( n->data <= lower || n->data >= upper ) return false;
-    return (  isBST( n->left, lower, n->data )  &&  isBST( n->right, n->data, upper )  );
-}
-
-bool compare( Node* a, Node* b, vector<pair<int, int>> &mismatch )
-{
-    if ( !a && !b ) return true;
-    if ( !a || !b ) return false;
-
-    if ( a->data != b->data )
-        mismatch.push_back( pair<int, int> (a->data, b->data) );
-
-    return ( compare( a->left, b->left, mismatch ) && compare( a->right, b->right, mismatch ) );
-}
-
-
-// } Driver Code Ends
-/*
-struct Node
-{
-    int data;
-    Node *left, *right;
-    Node(int val)
-    {
-        data = val;
-        left = right = NULL;
-    }
-};
-*/
 
 class Solution {
   public:
+  //?for way-1 Space-O(n)
    void Inorder(Node*root,vector<Node*>&ans){
          if(root==nullptr) return;
         //l
@@ -126,84 +15,97 @@ class Solution {
     {
         //!expected time-O(n) space - O(1)
         
-        //?way- Time-O(n) Space O(n)
+        //?way 1- Time-O(n) Space O(n)
         //find inorder traversal and store in arr
         //as two nodes are swapped so in their inorder traversal also at two position , there will be wrong value
         //so find that wrong value and swapp that values to correct the BST
-        vector<Node*>ans;//stores root instead of their value so that we can directly swap instead of agin traversing the root
-        Inorder(root,ans);
-        Node* first=nullptr,*second=nullptr;
-        Node* last=nullptr;
-        Node*present=nullptr;
+        // vector<Node*>ans;//stores root instead of their value so that we can directly swap instead of agin traversing the root
+        // Inorder(root,ans);
+        // Node* first=nullptr,*second=nullptr;
+        // Node* last=nullptr;
+        // Node*present=nullptr;
         
-        for(int i=0;i<ans.size();i++){
-            last=present;
-            present=ans[i];
-            //when problem in inorder traversal (i., wrong value)
-            if( last && present->data<last->data){
-                if(first==nullptr){
-                     first=last;//first wrong value
+        // for(int i=0;i<ans.size();i++){
+        //     present=ans[i];
+        //     //when problem in inorder traversal (i., wrong value)
+        //     if( last && present->data<last->data){
+        //         //in asc order previous node is always smaller than curr node
+        //         //so if prev node is greater than curr node it means something is wrong
+        //         if(first==nullptr){
+        //              first=last;//first wrong node
+        //         }
+        //         second=present;//second wrong node
+        //     }
+            
+        //     last=present;
+        // }
+        
+        // //now swap
+        // int num= first->data;
+        // first->data=second->data;
+        // second->data=num;
+        
+        //?-------------------------------------------->
+        
+        //!Way-2 Time-O(n)  Space O(1)
+        //as we need space O(1) we will use Morris Traversal
+        Node*first=nullptr,*second=nullptr;
+        Node*last=nullptr,*present=nullptr;
+        
+        while(root){
+            
+            if(root->left){//if left exist
+                //go to right most node from left that is rightmost node of root->left
+                Node*curr=root->left;
+                while(curr->right && curr->right!=root){
+                    curr=curr->right;
                 }
-                second=present;//second wrong
+                
+                //two case 
+                //1) left part not traversed
+                if(curr->right==nullptr){
+                    //make curr->right point root and simply go left
+                    curr->right=root;
+                    root=root->left;
+                }
+                else{
+                    //left part already traversed i.e, when curr->right=root
+                    curr->right=nullptr;//break link
+                    
+                    //check for wrong/swapped Node
+                    present=root;
+                    if(last && present->data < last->data){
+                        if(first==nullptr){
+                            first=last;
+                        }
+                        second=present;
+                    }
+                    
+                    last=present; //prsent root will be now last for next node in traversal
+                    root=root->right;
+                    //left part already traversed so move right
+                }
             }
-            
-            
+            else{
+                //when left part not exist (else part of first if conditon)
+                  //check for wrong/swapped Node
+                    present=root;
+                    if(last && present->data < last->data){
+                        if(first==nullptr){
+                            first=last;
+                        }
+                        second=present;
+                    }
+                    
+                    last=present; //prsent root will be now last for next node in traversal
+                    root=root->right;
+                    //left part Not exist so move right
+            }
         }
         
-        //now swap
+         //now swap
         int num= first->data;
         first->data=second->data;
         second->data=num;
     }
 };
-
-
-//{ Driver Code Starts.
-
-int main()
-{
-    int t;
-    cin >> t;
-    getchar();
-
-    while (t--)
-    {
-        string s;
-        getline(cin, s);
-
-        Node* root = buildTree(s);
-        Node* duplicate = buildTree(s);
-
-        Solution ob;
-        ob.correctBST(root);
-
-        // check 1: is tree now a BST
-        if ( ! isBST(root, INT_MIN, INT_MAX) )
-        {
-            cout << "0\n";
-            continue;
-        }
-
-        // check 2: comparing with duplicate tree
-
-        vector<pair<int, int>> mismatch;
-        // a vector to store data of mismatching nodes
-
-        if ( ! compare( root, duplicate, mismatch) )
-        {
-            // false output from this function indicates change in structure of tree
-            cout << "0\n";
-            continue;
-        }
-
-        // finally, analysing the mismatching nodes
-        if ( mismatch.size() != 2 || mismatch[0].first != mismatch[1].second || mismatch[0].second != mismatch[1].first )
-            cout << "0\n";
-        else cout << "1\n";
-    
-cout << "~" << "\n";
-}
-    return 0;
-}
-
-// } Driver Code Ends
