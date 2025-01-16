@@ -139,13 +139,15 @@ class Solution{
         //if balanced > 1 than we have to balance on left (either can ve LL or LR)
         //if balanced < -1 than we have to balance on right (either RR or RL);
         
-        //balance on left (either LL or LR)
-        if(balanced>1 && root->left->data > key){
+         //balance on left (either LL or LR)
+        if(balanced>1){
             
-            return rightRotation(root);
-        }
-            
-            else if(balanced>1 && root->left->data < key){
+            //L L as root->left->data > key  , key will add on left and unbalancening will be due to l
+            if(root->left->data > key ){
+                // rotate top(root) to right
+                return rightRotation(root);
+            }
+            else if(root->left->data < key){
                 //L R as root->left->data < key  , key will add on right and unbalancening will be due to R
                 
                 //rotate mid (child) to left than rotate top(root) to right
@@ -155,12 +157,14 @@ class Solution{
                 //rotate top(root) right
                 return rightRotation(root);
             }
-        
-        else if(balanced<-1 && root->right->data < key){//balance on right (either RR or RL)
-            return leftRotation(root);
+        }
+        else if(balanced<-1){//balance on right (either RR or RL)
+             //RR as root->right->data < key  , key will add on right and unbalancening will be due to R
+            if(root->right->data < key ){
+                // rotate top(root) to left
+                return leftRotation(root);
             }
-            
-            else if( balanced <-1 &&root->right->data > key){
+            else if(root->right->data > key){
                 //R L as root->right->data > key  , key will add on left and unbalancening will be due to L
                 
                 //rotate mid (child) to right than rotate top(root) to left
@@ -170,7 +174,7 @@ class Solution{
                 //rotate top(root) left
                 return leftRotation(root);
             }
-        
+        }
         else{//when no balancing needed already in balanced state
             return root; //
         }
