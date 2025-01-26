@@ -96,11 +96,34 @@ Node *buildTree(string str) {
 class Solution {
   public:
   
-  bool childExist(int ind,int n){
-      return ind<n;
-  }
+    int size(Node*tree){
+        if(!tree) return 0;
+        return 1+ size(tree->left) + size(tree->right);
+    }
+    
+    //check Complete Binary tree
+    bool CBT(Node*tree,int ind,int nodes){
+        
+        if(!tree) return 1; // for leaf nodes as their childs will be nullptr 
+        
+        if(ind>=nodes) return 0;
+        
+         return CBT(tree->left, ind*2+1 , nodes) &&  CBT(tree->right, ind*2+2 , nodes);
+        
+    }
+    
     bool isHeap(struct Node* tree) {
-        // code here
+       
+       int nodes=size(tree);
+       
+       
+       if(!CBT(tree,0,nodes)) return 0;
+       
+        
+        //we have checked that given BT is CBT
+        //NOw check parent is greate than or equal to its child or not
+        bool heap=true;
+        
         queue<Node*>q;
         q.push(tree);
         vector<int>levelorder;
@@ -109,58 +132,27 @@ class Solution {
             q.pop();
             levelorder.push_back(top->data);
             
-            if(top->left) q.push(top->left);
-            if(top->right) q.push(top->right);
-        }
-        
-        bool left=true,right=true;
-        int n=levelorder.size();
-        bool heap=true;
-        
-        for(int i=0;i<n;i++){
+            if(top->left){
+                 q.push(top->left);
+                 if(top->data < top->left->data){
+                     heap=false;
+                     break;
+                 }
+            }
             
-            int leftChild=i*2+1;
-            int rightChild=i*2+2;
-            left=childExist(leftChild,n);
-            right=childExist(rightChild,n);
-            
-            if(leftChild>=n && rightChild>=n){
-                left=false;
-                right=false;
+            if(top->right) {
+                q.push(top->right);
+                 if(top->data < top->right->data){
+                     heap=false;
+                     break;
+                 }
                 
             }
-            else if(leftChild>=n) {
-                left=false;
-                heap=false; //means left child not exist only right child exist it violates heap
-                break;
-                
-            }
-            else if(leftChild<n && rightChild>=n){
-             if(!right){
-                 heap=false;
-                 break;
-             }
-             left=true;
-             right=false;
-            }
-            else{
-                if(!right){
-                    heap=false;
-                    break;
-                }
-                if(levelorder[i]<levelorder[leftChild] || levelorder[i]<levelorder[rightChild]){
-                    heap=false;
-                    break;
-                }
-                left=true;
-                right=true;
-            }
-            
-           
         }
         
-        if(heap) return true;
-        return false;
+        return heap;
+        
+       
     }
 };
 
