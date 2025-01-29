@@ -22,6 +22,10 @@ public:
          remainSum=sum-maxEle;
          if(remainSum<=0 || remainSum>maxEle) return 0;
 
+    //   long long Element=maxEle-remainSum;
+    //this will give tle for  target=[10000000, 1] etc.
+    
+    // The % prevents the TLE from the case (e.g., target=[10000000, 1]) where the largest element is significantly bigger than the sum of other elements.
          long long Element=maxEle%remainSum;
          if(Element==0){
             if(remainSum==1) return true;
