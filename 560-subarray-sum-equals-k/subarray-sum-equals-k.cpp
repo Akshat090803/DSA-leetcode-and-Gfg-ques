@@ -19,8 +19,14 @@ public:
             
             else{
                 // mp.insert({sum,1});
-                mp[sum]++;
+                // mp[sum]=1;
+                mp[sum]++;//this will give correct output among above two
+                //becuse in above if we are checking (mp.find(sum-k)!=mp.end() in this  mp[sum]++; is only updated when sum-k present
+                //sand in else we are doing mp[sum]=1
+                //so if that sum already present sum is getting
             }
+
+          
         }
         return count;
     }
