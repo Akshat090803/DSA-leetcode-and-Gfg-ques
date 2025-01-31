@@ -25,8 +25,13 @@ public:
             // ?Normalize the sum % k to be non-negative
             // consider arr={-1,2,9} k=2 for sum=-1 mod will be -1 so to handle
             // this ensures that you always work with a non-negative key in the hashmap. 
-            int mod = ((sum % k) + k) % k;
+            // int mod = ((sum % k) + k) % k;
 
+           //this  mod = ((sum % k) + k) % k; can be wriiten as this
+           int mod=sum%k;
+           if(mod<0){
+            mod=mod+k;
+           }
             if (mp.find(mod) != mp.end()) {
                 count = count + mp[mod];
                 mp[mod]++;
