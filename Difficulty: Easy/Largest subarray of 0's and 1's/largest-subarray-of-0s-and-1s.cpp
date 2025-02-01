@@ -29,6 +29,7 @@ class Solution {
     //Store the first occurrence of each cumulative sum in a hash map. If the same sum reoccurs, it implies that the subarray between these indices is balanced.
     //If sum exists in the map, calculate the length of the subarray between the current index and the earlier index where the sum was found.
     
+    //convert 0's to -1
     for(int i=0;i<arr.size();i++) if(arr[i]==0) arr[i]=-1;
     
     int sum=0;
