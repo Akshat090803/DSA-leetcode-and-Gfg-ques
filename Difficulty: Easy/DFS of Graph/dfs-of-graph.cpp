@@ -35,31 +35,8 @@ class Solution {
         dfs(node,adj,visited,ans);
         return ans;
         
-        //!way-2 without using recursion but using stack as in recursion,func call ar maintained in stack so we can solve recursion soln with using stack also
-       //time and spcae will be same as way-1
-        // int v=adj.size();
-        // stack<int>st;
-        // vector<bool>visited(v,0);
-        // st.push(0);
-        // visited[0]=1;
-        // vector<int>ans;
-        // while(!st.empty()){
-        //     int node=st.top();
-        //     st.pop();
-        //     ans.push_back(node);
-            
-        //     //!as in the list , for that vertex , it will visite its first neighbour so to get first neighbour at top of stack we push ele in stack form end of arr to begining of arr for the list of that vertex .
-        //     //?see example 1 
-        //     for(int j=adj[node].size()-1;j>=0;j--){
-        //         int vertex=adj[node][j];
-                
-        //         if( !visited[vertex]){
-        //             visited[vertex]=1;
-        //             st.push(vertex);
-        //         }
-        //     }
-        // }
-        // return ans;
+     
+       
         
     }
 };
