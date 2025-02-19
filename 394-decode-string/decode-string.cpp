@@ -13,14 +13,23 @@ public:
                 current_string = "";
                 num = 0;
             } else if (c == ']') {
-                string repeated_string = "";
+                // string repeated_string = "";
+                // for (int i = 0; i < st.top().second; ++i) {
+                //     repeated_string += current_string;
+                // }
+                // current_string =
+                //     st.top().first +
+                //     repeated_string; // Combine with previous string
+                // st.pop();
+
+                //it can be wriiten like this also
+                string prevString=st.top().first;
                 for (int i = 0; i < st.top().second; ++i) {
-                    repeated_string += current_string;
+                    prevString += current_string;
                 }
-                current_string =
-                    st.top().first +
-                    repeated_string; // Combine with previous string
+                current_string=prevString;
                 st.pop();
+
             } else {
                 current_string += c; // Append character to current string
             }
