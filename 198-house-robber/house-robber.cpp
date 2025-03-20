@@ -50,8 +50,29 @@ public:
         //for nums of size 6 ,the max func call will be of i=size-1
         //so max index for dp arr will be size()-1
         //so simply make dp array of size nums.szie() as last ind wil be size-1
-        vector<int>dp(nums.size(),-1);
-        return dp_TopDown(i,nums,dp);
+        //? vector<int>dp(nums.size(),-1);
+        //? return dp_TopDown(i,nums,dp);
+
+        //!Dp Bottom up approach
+        int n=nums.size();
+        //this is base condiiton 1 when single house is there i.e, i=0
+        if(n==1) 
+        return nums[0];
+ //whe i=1 (menas two houses)
+        if(n==2){
+            return  max(nums[0],nums[1]);
+        }
+
+        vector<int>dp(n,-1);
+//intiialize with base case
+dp[0]=nums[0];
+dp[1]=max(nums[0],nums[1]);
+
+for(int i=2;i<n;i++){
+dp[i]=max(nums[i]+dp[i-2] , dp[i-1]);
+}
+
+return dp[n-1];
 
     }
 };
