@@ -54,25 +54,53 @@ public:
         //? return dp_TopDown(i,nums,dp);
 
         //!Dp Bottom up approach
-        int n=nums.size();
-        //this is base condiiton 1 when single house is there i.e, i=0
+//         int n=nums.size();
+//         //this is base condiiton 1 when single house is there i.e, i=0
+//         if(n==1) 
+//         return nums[0];
+//  //whe i=1 (menas two houses)
+//         if(n==2){
+//             return  max(nums[0],nums[1]);
+//         }
+
+//         vector<int>dp(n,-1);
+// //intiialize with base case
+// dp[0]=nums[0];
+// dp[1]=max(nums[0],nums[1]);
+
+// for(int i=2;i<n;i++){
+// dp[i]=max(nums[i]+dp[i-2] , dp[i-1]);
+// }
+
+// return dp[n-1];
+
+
+//!Dp space optimzation
+//?if we see we need only two value in each iteration dp[i-1] and dp[i-2];
+//so instead of making dp array we can do this with two variables
+ int n=nums.size();
+        
         if(n==1) 
         return nums[0];
- //whe i=1 (menas two houses)
+
         if(n==2){
             return  max(nums[0],nums[1]);
         }
 
-        vector<int>dp(n,-1);
-//intiialize with base case
-dp[0]=nums[0];
-dp[1]=max(nums[0],nums[1]);
+int prev2=nums[0];
+int prev1=max(nums[0],nums[1]);
+int max_rob=0;
 
 for(int i=2;i<n;i++){
-dp[i]=max(nums[i]+dp[i-2] , dp[i-1]);
+// dp[i]=max(nums[i]+dp[i-2] , dp[i-1]);
+max_rob=max(nums[i]+prev2 , prev1);
+
+//update variable
+prev2=prev1;
+prev1=max_rob;
 }
 
-return dp[n-1];
+return max_rob;
 
     }
 };
