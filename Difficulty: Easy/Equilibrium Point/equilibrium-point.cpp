@@ -1,58 +1,26 @@
-//{ Driver Code Starts
-// Initial Template for C++
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
 class Solution {
   public:
     // Function to find equilibrium point in the array.
     int findEquilibrium(vector<int> &arr) {
-        // As required Space is O(1) we will not create Suffix and prefix arr
-        //instead we will simultaneously find prefix and suffix;
-        int prefix_sum=0;
+        // code here
+          int prefix = arr[0]; //initliase with first ele as for index 1 , prefix will be sum of till index 0
         int total_sum=0;
         
         
          //calculate total sum
-        for(x:arr) total_sum+=x;
+        for(int x:arr) total_sum+=x;
         
         //final code
-        for(int i=0;i<arr.size();i++){
-            prefix_sum+=arr[i];
-            int suffix=total_sum;
+        //first and last index will never eb equilibrium point as they doent have either left or right part 
+        for(int i=1;i<arr.size()-1;i++){
             
-            if(prefix_sum==total_sum) return i;
+            int suffix=total_sum - prefix - arr[i]; //for suffix (not including current)
             
-            total_sum-=arr[i];
+            if(prefix==suffix) return i;
+            
+            prefix+=arr[i]; 
         }
-        
+        //!make prefix and suffix array for [1, 2 ,0 ,3] to understand the code
         return -1;
-       
     }
 };
-
-//{ Driver Code Starts.
-
-int main() {
-    int t;
-    cin >> t;
-    cin.ignore(); // To discard any leftover newline characters
-    while (t--)   // while testcases exist
-    {
-        vector<int> arr;
-        string input;
-        getline(cin, input); // Read the entire line for the array elements
-        stringstream ss(input);
-        int number;
-        while (ss >> number) {
-            arr.push_back(number);
-        }
-
-        Solution ob;
-        cout << ob.findEquilibrium(arr) << endl;
-        cout << "~" << endl;
-    }
-}
-// } Driver Code Ends
