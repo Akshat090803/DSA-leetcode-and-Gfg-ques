@@ -1,25 +1,26 @@
 class Solution {
 public:
     int removeDuplicates(vector<int>& arr) {
-         int start=0;
-  int end=1;
-  int n=arr.size();
+       int write=0;
+      int read=0;
 
-  
-  if(n==1) return 1;
+      int n= arr.size();
+      while(read<n){
+        int currNum= arr[read]; 
+       
+        //go to next unique number
+        while( read<n){
+            if(arr[read]!=currNum){
+              break;
+            }
 
-  while(end<n){
-    if(arr[start]==arr[end]){
-      end++;
-    }else{
-      start++;
-      arr[start]=arr[end];//overwrite the duplicate elements with the next unique element. 
-      //by doing this we are also bringing unique element in starting forming first count elements as unique arr
-      //forming like this [u1,u2,u3,x,x,x,x,x]
-      end++;
+            read++;
+        }
 
-    }
-  }
-  return start+1;
+        arr[write]=currNum;
+        write++;
+
+      }
+      return write;  // write will give the count  
     }
 };
