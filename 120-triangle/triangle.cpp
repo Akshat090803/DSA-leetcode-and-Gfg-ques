@@ -47,23 +47,41 @@ public:
    
       
     // bottom-up calculation
-        vector<vector<int>> dp(n);
+    //     vector<vector<int>> dp(n);
+    //     for (int r = 0; r < n; r++) dp[r].assign(r+1, INT_MAX);
+
+    //     dp[0][0] = triangle[0][0]; //dp intializatiion
+
+    // for (int row = 0; row <n-1; row++) {
+    //     for (int i = 0; i <= row; i++) {
+    //        dp[row+1][i]= min(dp[row+1][i] , dp[row][i] + triangle[row+1][i]);
+    //        dp[row+1][i+1]= min(dp[row+1][i+1] , dp[row][i] + triangle[row+1][i+1]);
+    //     }
+    // }
+
+    // //if we move backward we dont have to do this step as final ans will be at dp[0][0]
+    // int min_=INT_MAX;
+    // for (auto x:dp[n-1]) min_=min(min_,x);
+    // return min_;
+    
+    //!------------------------------------
+       //!Bottom Up  without space optimization
+    // Moving Backward
+     vector<vector<int>> dp(n);
         for (int r = 0; r < n; r++) dp[r].assign(r+1, INT_MAX);
 
-        dp[0][0] = triangle[0][0]; //dp intializatiion
+        dp[n-1] = triangle[n-1]; //dp intializatiion //as we moving backward initialise with last row
+        //we wil sattrt loop form n-2 row as we can get i , i+1 value
 
-    for (int row = 0; row <n-1; row++) {
+    for (int row = n-2; row >= 0; row--) {
         for (int i = 0; i <= row; i++) {
-           dp[row+1][i]= min(dp[row+1][i] , dp[row][i] + triangle[row+1][i]);
-           dp[row+1][i+1]= min(dp[row+1][i+1] , dp[row][i] + triangle[row+1][i+1]);
+           dp[row][i]= min(dp[row][i] , dp[row+1][i] + triangle[row][i]);
+           dp[row][i]= min(dp[row][i] , dp[row+1][i+1] + triangle[row][i]);
         }
     }
 
-    //if we move backward we dont have to do this step as final ans will be at dp[0][0]
-    int min_=INT_MAX;
-    for (auto x:dp[n-1]) min_=min(min_,x);
-    return min_;
-    
+   return dp[0][0];
+     
     }
 
 };
