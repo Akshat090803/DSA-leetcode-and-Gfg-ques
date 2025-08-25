@@ -24,17 +24,46 @@ public:
         //  vector<vector<int>> dp(n);
         //  for (int r = 0; r < n; r++) dp[r].assign(r+1, -1);
         // return minTotal(0,0,n,triangle , dp);
+//-------------------------------------------------------------
+        //!Try with Bottom Up  with space optimization
 
-        //!Try with Bottom Up
-        //  int n = triangle.size();
-    vector<int> dp = triangle[n-1]; // start with last row
+        //Bottom Up with space optimization
+        //we moving backward from n-2 to 0 as we know by this final ans will be at dp[0] . if we move forward form 0 to n-2 for final ans , we have to traverse whole last row to find min at that row and return that 
+        //and also we can't be able to use space optimization 
+        //we didnt start fiom n-1 and start form n-2 as at n-2 the value of last row will be thir min value .
+    // vector<int> dp = triangle[n-1]; // start with last row
 
+    // // bottom-up calculation
+    // for (int row = n-2; row >= 0; row--) {
+    //     for (int i = 0; i <= row; i++) {
+    //         dp[i] = triangle[row][i] + min(dp[i], dp[i+1]);
+    //     }
+    // }
+    // return dp[0];
+
+    //-----------------------------
+    
+    //!Bottom up without space optimziation space O(N^2)
+   
+      
     // bottom-up calculation
-    for (int row = n-2; row >= 0; row--) {
+        vector<vector<int>> dp(n);
+        for (int r = 0; r < n; r++) dp[r].assign(r+1, INT_MAX);
+
+        dp[0][0] = triangle[0][0]; //dp intializatiion
+
+    for (int row = 0; row <n-1; row++) {
         for (int i = 0; i <= row; i++) {
-            dp[i] = triangle[row][i] + min(dp[i], dp[i+1]);
+           dp[row+1][i]= min(dp[row+1][i] , dp[row][i] + triangle[row+1][i]);
+           dp[row+1][i+1]= min(dp[row+1][i+1] , dp[row][i] + triangle[row+1][i+1]);
         }
     }
-    return dp[0];
+
+    //if we move backward we dont have to do this step as final ans will be at dp[0][0]
+    int min_=INT_MAX;
+    for (auto x:dp[n-1]) min_=min(min_,x);
+    return min_;
+    
     }
+
 };
