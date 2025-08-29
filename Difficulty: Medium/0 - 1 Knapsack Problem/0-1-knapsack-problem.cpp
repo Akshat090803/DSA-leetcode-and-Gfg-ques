@@ -25,12 +25,36 @@ class Solution {
     }
     int knapsack(int W, vector<int> &val, vector<int> &wt) {
         // code here
-        //  vector<unordered_map<int,int>>dp(val.size()); //
-        //instead of vector of unordered_map we can use 2d vector as well
-        //we can use vector<vector<int>>dp(val.size() , vector<int>(totalSum+1, -1)); as for column of 2d arr max value/index can be totalSum if we keep store info for (i,currSum)
-        //if we use (i, Remainig Wt) for memoization , than dp array can be vector<vector<int>>dp(val.size() , vector<int>(W+1, -1)); as for col of 2d arr max W /ind can be W 
-        //vector of unordered map will same for both (i,sum) or (i,wt)
-        vector<vector<int>> dp(val.size()+1, vector<int>(W+1, -1));
-        return result(0,W,val,wt , dp);
+        
+        // vector<vector<int>> dp(val.size()+1, vector<int>(W+1, -1));
+        // return result(0,W,val,wt , dp);
+        
+        //Bottom UP
+        vector<vector<int>> dp(val.size()+1, vector<int>(W+1, 0));
+        
+        //base case
+        for(int firstWt=wt[0];firstWt<=W ; firstWt++){
+            dp[0][firstWt]=val[0];
+            //
+        }
+        
+        for(int i=1;i<val.size();i++){
+            for(int currWt=0;currWt<=W;currWt++){
+                
+                //exclude  = noValue + value when at prev row  
+                int exclude = 0 + dp[i-1][currWt]; //dp[i-1][currWt-0 (0 beacause we are not including wt[i])]
+                
+                //include
+                int include=0;
+                if(wt[i] <= currWt){
+                    include = val[i] + dp[i-1][currWt - wt[i] ];
+                }
+                
+                dp[i][currWt]=max(include,exclude);
+            }
+        }
+        
+        return dp[val.size()-1][W];
+        
     }
 };
