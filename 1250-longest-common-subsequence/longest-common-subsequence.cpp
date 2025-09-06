@@ -63,20 +63,54 @@ public:
 // ?The trick is to make your dp table of size (n1+1) × (n2+1) and shift indices by 1.
 // ?That way, we don’t need to write separate loops for row 0 and col 0.
        
-        int n1 = text1.size(), n2 = text2.size();
-    vector<vector<int>> dp(n1 + 1, vector<int>(n2 + 1, 0));
+    //     int n1 = text1.size(), n2 = text2.size();
+    // vector<vector<int>> dp(n1 + 1, vector<int>(n2 + 1, 0));
+
+    // for (int i = 1; i <= n1; i++) {
+    //     for (int j = 1; j <= n2; j++) {
+    //         if (text1[i - 1] == text2[j - 1]) {
+    //             dp[i][j] = 1 + dp[i - 1][j - 1];
+    //         } else {
+    //             dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+    //         }
+    //     }
+    // }
+
+    // return dp[n1][n2];
+
+    //!Space optimzation
+//     Since each dp[i][j] only depends on:
+
+// dp[i-1][j-1] (diagonal)
+
+// dp[i-1][j] (top)
+
+// dp[i][j-1] (left)
+
+// We don’t need the entire table – just the previous row and the current row.
+// That reduces memory from O(n1 × n2) → O(min(n1, n2)).
+
+int n1 = text1.size(), n2 = text2.size();
+
+    // Make sure we use less space (row size = smaller string)
+    if (n2 > n1) swap(text1, text2), swap(n1, n2);
+
+    vector<int> prev(n2 + 1, 0), curr(n2 + 1, 0);
 
     for (int i = 1; i <= n1; i++) {
         for (int j = 1; j <= n2; j++) {
             if (text1[i - 1] == text2[j - 1]) {
-                dp[i][j] = 1 + dp[i - 1][j - 1];
+                curr[j] = 1 + prev[j - 1];
             } else {
-                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+                curr[j] = max(prev[j], curr[j - 1]);
             }
         }
+        prev = curr; // move current row into prev
     }
 
-    return dp[n1][n2];
-    
+    return prev[n2];
+
+
+
     }
 };
