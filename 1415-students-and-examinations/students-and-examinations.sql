@@ -15,4 +15,4 @@ LEFT JOIN Examinations ex
 GROUP BY
     st.student_id, st.student_name, su.subject_name
 order by
-  student_id asc , subject_name asc;
+  student_id asc , su.subject_name asc;
