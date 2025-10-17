@@ -11,10 +11,10 @@
 -- where wL.temperature > wR.temperature;
 
 SELECT
-    w1.id
+    today.id
 FROM
-    Weather w1
+    Weather today
 JOIN
-    Weather w2 ON w1.recordDate = w2.recordDate + INTERVAL '1 day'
+    Weather yesterday ON today.recordDate = yesterday.recordDate + INTERVAL '1 day'
 WHERE
-    w1.temperature > w2.temperature;
+    today.temperature > yesterday.temperature;
